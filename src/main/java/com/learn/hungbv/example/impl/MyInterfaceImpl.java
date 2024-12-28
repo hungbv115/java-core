@@ -12,7 +12,7 @@ public class MyInterfaceImpl implements MyInterface {
     Map<String, List<String>> conditionSplit = new HashMap<>();
     @Override
     public void performAction() {
-        String condition = "(1,6,CH,EQ,C'SRINIV',AND,7,6,ZD,LT,1000)";
+        String condition = "(1,6,CH,EQ,C'SRINIV',OR,7,6,ZD,LT,1000)";
         conditionSplit = new HashMap<>();
         List<String> keys = new ArrayList<>();
         findByPattern("[0-9]+,[0-9]+", condition, keys);
@@ -60,8 +60,14 @@ public class MyInterfaceImpl implements MyInterface {
                 if(flag > 0) {
                     result.append(",AND,");
                 }
-                result.append(tempArr[0]).append(",").append(content);
+                result.append(element.split("-")[0]).append(",0,0,")
+                        .append(element.split("-")[1]).append(",Str,")
+                        .append(tempArr[0]).append(",").append(content);
                 flag = start;
+            }
+            if(fields.size() > 1) {
+                result.insert(0,'(');
+                result.insert(result.length(),')');
             }
             stringFinal.append(opera.replace(tempArr[0]+","+tempArr[1], result));
 
