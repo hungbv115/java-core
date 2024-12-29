@@ -1,5 +1,6 @@
 package com.learn.hungbv.example.impl;
 
+import com.learn.hungbv.annotation.Schedule;
 import com.learn.hungbv.annotation.Singleton;
 import com.learn.hungbv.example.MyInterface;
 
@@ -10,6 +11,8 @@ import java.util.regex.Pattern;
 @Singleton
 public class MyInterfaceImpl implements MyInterface {
     Map<String, List<String>> conditionSplit = new HashMap<>();
+
+    @Schedule(time = 1)
     @Override
     public void performAction() {
         String condition = "(1,6,CH,EQ,C'SRINIV',OR,7,6,ZD,LT,1000)";
@@ -74,5 +77,10 @@ public class MyInterfaceImpl implements MyInterface {
         }
         System.out.println(stringFinal);
     }
+
+//    @Schedule(fixedRate = 2000)
+//    private void methodRate() {
+//        System.out.println("Đang chạy ...");
+//    }
 
 }

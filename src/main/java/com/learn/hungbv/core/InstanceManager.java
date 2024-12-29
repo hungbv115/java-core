@@ -17,14 +17,15 @@ public class InstanceManager {
     private static final Map<Class<?>, Object> context = new HashMap<>();
     private static final Map<Class<?>, Set<Class<?>>> interfaceImplementations = new HashMap<>();
 
-    static {
-        try {
-            initializeInstances("com.learn.hungbv.example"); // Thay đổi package này theo dự án của bạn
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to initialize singletons", e);
-        }
-    }
+//    static {
+//        try {
+//            initializeInstances("com.learn.hungbv.example"); // Thay đổi package này theo dự án của bạn
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new RuntimeException("Failed to initialize singletons", e);
+//        }
+//    }
+
 
     public static <T> T getInstance(Class<T> clazz) {
         if (clazz.isAnnotationPresent(Singleton.class)) {
@@ -62,18 +63,25 @@ public class InstanceManager {
         return createInstance(clazz);
     }
 
-    private static void initializeInstances(String packageName) throws ClassNotFoundException, IOException {
+    static void initializeInstances(String packageName) throws ClassNotFoundException, IOException {
         Set<Class<?>> classes = getClasses(packageName);
 
         for (Class<?> clazz : classes) {
-            if (clazz.isAnnotationPresent(Singleton.class) || clazz.isAnnotationPresent(MultiInstance.class)) {
-                context.put(clazz, createInstance(clazz));
-            }
-            for (Class<?> iface : clazz.getInterfaces()) {
-                interfaceImplementations.computeIfAbsent(iface, k -> new HashSet<>()).add(clazz);
-            }
-
+            processClass(clazz);
         }
+    }
+
+    private static void processClass(Class<?> clazz) {
+        if (clazz.isAnnotationPresent(Singleton.class) || clazz.isAnnotationPresent(MultiInstance.class)) {
+            context.put(clazz, createInstance(clazz));
+        }
+        for (Class<?> iface : clazz.getInterfaces()) {
+            interfaceImplementations.computeIfAbsent(iface, k -> new HashSet<>()).add(clazz);
+        }
+    }
+
+    public static Set<Class<?>> getAllLoadedClasses() {
+        return new HashSet<>(context.keySet()); // Trả về bản sao an toàn
     }
 
     private static Set<Class<?>> getClasses(String packageName) throws ClassNotFoundException, IOException {

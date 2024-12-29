@@ -1,5 +1,7 @@
 package com.learn.hungbv;
 
+import com.learn.hungbv.annotation.BootstrapApplication;
+import com.learn.hungbv.core.ApplicationContext;
 import com.learn.hungbv.core.InstanceManager;
 import com.learn.hungbv.example.AnotherClass;
 import com.learn.hungbv.example.MyInterface;
@@ -7,6 +9,7 @@ import com.learn.hungbv.example.MySingleton;
 
 import java.util.List;
 
+@BootstrapApplication
 public class Main {
     public static void main(String[] args) {
 //        MySingleton instance1 = InstanceManager.getInstance(MySingleton.class);
@@ -34,7 +37,10 @@ public class Main {
 //        InstanceManager.registerImplementation(MyInterface.class, MyInterfaceImpl.class);
 
         // Sử dụng đối tượng MyInterface
-        List<MyInterface> myInterface = InstanceManager.getInstances(MyInterface.class);
-        myInterface.forEach(MyInterface::performAction);
+//        List<MyInterface> myInterface = InstanceManager.getInstances(MyInterface.class);
+//        myInterface.forEach(MyInterface::performAction);
+
+        // Khởi động ứng dụng
+        ApplicationContext.run(Main.class);
     }
 }
