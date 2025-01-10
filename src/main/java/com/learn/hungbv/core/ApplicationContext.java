@@ -34,15 +34,15 @@ public class ApplicationContext {
         }));
 
         // Vòng lặp chính giữ ứng dụng chạy
-//        while (running.get()) {
-//            try {
-//                Thread.sleep(1000); // Chờ 1 giây trước khi kiểm tra lại
-//            } catch (InterruptedException e) {
-//                Thread.currentThread().interrupt();
-//                System.out.println("Ứng dụng bị gián đoạn.");
-//                break;
-//            }
-//        }
+        while (running.get()) {
+            try {
+                Thread.sleep(1000); // Chờ 1 giây trước khi kiểm tra lại
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Ứng dụng bị gián đoạn.");
+                break;
+            }
+        }
 
         System.out.println("Ứng dụng đã dừng.");
     }

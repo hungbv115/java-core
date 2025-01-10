@@ -12,31 +12,32 @@ import java.util.regex.Pattern;
 public class MyInterfaceImpl implements MyInterface {
     Map<String, List<String>> conditionSplit = new HashMap<>();
 
-    @Schedule(time = 1)
+//    @Schedule(time = 1)
     @Override
     public void performAction() {
-        String condition = "(1,6,CH,EQ,C'SRINIV',OR,7,6,ZD,LT,1000)";
+        String condition = "(1,6,CH,eq,100000,OR,7,6,ch,EQ,c'0')";
         conditionSplit = new HashMap<>();
         List<String> keys = new ArrayList<>();
         findByPattern("[0-9]+,[0-9]+", condition, keys);
         conditionSplit.put("INCLUDE", keys);
         keys = new ArrayList<>();
-        findByPattern("(EQ|NE|GT|GE|LT|LE),([C|X]'.*'|[0-9]+)(,AND,|,OR,)?", condition, keys);
+        findByPattern("(EQ|NE|GT|GE|LT|LE),([CX]'.*?'|\\d+)(,AND,|,OR,)?", condition, keys);
         conditionSplit.put("INCLUDE-OPERA", keys);
         System.out.println(conditionSplit);
         subFunc();
     }
 
     private static void findByPattern(String regex, String condition, List<String> keys) {
-        Pattern conPattern = Pattern.compile(regex);
+        Pattern conPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher conMatcher = conPattern.matcher(condition);
         while (conMatcher.find()) {
             keys.add(conMatcher.group());
         }
+
     }
 
     private void subFunc() {
-        List<List<String>> fieldss = List.of(List.of("1-3", "2-3"), List.of("3-4"));
+        List<List<String>> fieldss = List.of(List.of("1-3", "2-3"), List.of("3-1"));
         List<String> keys = conditionSplit.get("INCLUDE");
         StringBuilder stringFinal = new StringBuilder();
         for (int i = 0; i < keys.size(); i++) {
@@ -44,13 +45,13 @@ public class MyInterfaceImpl implements MyInterface {
             String opera = operator.get(i);
             String[] tempArr = new String[3];
             String tempFormat = "";
-            Pattern conPattern = Pattern.compile("(EQ|NE|GT|GE|LT|LE),([C|X]'.*'|[0-9]+)(,(AND|OR),)?");
+            Pattern conPattern = Pattern.compile("(EQ|NE|GT|GE|LT|LE),([CX]'.*?'|\\d+)(,AND,|,OR,)?", Pattern.CASE_INSENSITIVE);;
             Matcher conMatcher = conPattern.matcher(opera);
             while (conMatcher.find()) {
                 tempArr[0] = conMatcher.group(1);
                 tempArr[1] = conMatcher.group(2);
-                tempArr[2] = conMatcher.group(4) != null ? conMatcher.group(4) : "";
-                tempFormat = conMatcher.group(2).replaceAll("[C|X]'|'$", "");
+                tempArr[2] = conMatcher.group(3) != null ? conMatcher.group(3) : "";
+                tempFormat = conMatcher.group(2).replaceAll("[CcXx]'|'$", "");
             }
 
             int flag = 0;
