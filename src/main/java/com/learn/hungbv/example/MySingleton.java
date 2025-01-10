@@ -10,7 +10,7 @@ import com.learn.hungbv.example.impl.RedisServiceImpl;
 @Singleton
 public class MySingleton {
 
-    @Schedule(fixedRate = 2000)
+//    @Schedule(fixedRate = 2000)
     public void doSomething() throws Exception {
         RedisService redisService = new RedisServiceImpl();
 

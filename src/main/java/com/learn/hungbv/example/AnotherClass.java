@@ -15,7 +15,7 @@ public class AnotherClass {
         return dependency;
     }
 
-    @Schedule(time = 1)
+//    @Schedule(time = 1)
     public void performAction() throws InterruptedException {
         Cache<String, String> cache = new LinkedCache<>(10, 2000);
         cache.put("hungbv", "hung");
