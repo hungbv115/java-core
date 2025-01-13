@@ -5,6 +5,7 @@ import com.learn.hungbv.annotation.Singleton;
 import com.learn.hungbv.example.MyInterface;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -35,6 +36,23 @@ public class ExampleImpl implements MyInterface {
     }
 
     @Schedule(time = 1)
+    public void example() {
+        int[] input = {3,2,4};
+        int target = 6;
+        int[] output = new int[2];
+        for (int i = 0; i < input.length; i++) {
+            for (int j = i + 1; j < input.length; j++) {
+                if (input[i] + input[j] == target) {
+                    output[0] = i;
+                    output[1] = j;
+                    System.out.println(Arrays.toString(output));
+                    break;
+                }
+            }
+        }
+    }
+
+//    @Schedule(time = 1)
     public void roundRobin() {
         int[] data = new int[1000];
         for (int i = 0; i < 1000; i++) {
